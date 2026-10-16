@@ -6,17 +6,17 @@
 
 ## FASE 1: Infraestructura, Modelos y Motor de Datos (Minuto 0 a Minuto 60)
 
-- [ ] **TASK-01 | Responsable: Juan José | [Modelo: Gemini Flash]**
+- [x] **TASK-01 | Responsable: Juan José | [Modelo: Gemini Flash]**
   - **Objetivo:** Inicializar estructura de carpetas del proyecto, `.gitignore`, `.env.example`, `requirements.txt` y los archivos de paquete `__init__.py`.
   - **Archivos a crear:** `.gitignore`, `.env.example`, `requirements.txt`, `src/__init__.py`, `src/core/__init__.py`, `src/ui/__init__.py`.
   - **Criterio de Verificación:** Ejecutar en terminal `pip install -r requirements.txt` y comprobar que `.env` aparece ignorado con `git check-ignore -v .env`.
 
-- [ ] **TASK-02 | Responsable: Juan José | [Modelo: Claude]**
+- [x] **TASK-02 | Responsable: Juan José | [Modelo: Claude]**
   - **Objetivo:** Implementar todas las `dataclasses` de dominio en `src/core/models.py` siguiendo exactamente el contrato de la Sección 2 de `specs/design.md`.
   - **Archivos a crear:** `src/core/models.py`.
   - **Criterio de Verificación:** Ejecutar `python -c "from src.core.models import Space, Resource, Reservation, Loan, Incident, ValidationResult, QuarantineRecord; print('Modelos OK')"` y verificar salida `'Modelos OK'`.
 
-- [ ] **TASK-03 | Responsable: Juan José | [Modelo: Claude]**
+- [x] **TASK-03 | Responsable: Juan José | [Modelo: Claude]**
   - **Objetivo:** Implementar `src/core/validators.py` con las constantes configurables en la cabecera y las funciones `validate_space_reservation`, `validate_resource_loan` y `should_block_asset_on_incident` (Reglas RN-01, RN-02, RN-03 y RN-04).
   - **Archivos a crear:** `src/core/validators.py`.
   - **Criterio de Verificación:** Ejecutar `python -c "from src.core.validators import validate_space_reservation, OVERCAPACITY_FACTOR; print('Validadores listos, factor:', OVERCAPACITY_FACTOR)"`.
