@@ -1,0 +1,2 @@
+Lee y obedece estrictamente todas las reglas arquitectónicas, de tipado y de dominio definidas en @AGENTS.md y @knowledge/campus_domain.md.
+Antes de escribir o modificar cualquier archivo, consulta los requisitos en @specs/requirements.md, los contratos exactos en @specs/design.md y tu tarea asignada en @specs/tasks.md.
