@@ -1,4 +1,4 @@
-# Plan de Tareas Atómicas y Enrutamiento Agéntico (`specs/tasks.md`)
+                      # Plan de Tareas Atómicas y Enrutamiento Agéntico (`specs/tasks.md`)
 
 > **Instrucción para Agentes (Antigravity / Codex):** Ejecuta únicamente la tarea solicitada por el desarrollador, respeta estrictamente las firmas de `specs/design.md` y ejecuta el comando de verificación antes de marcarla como completada.
 
