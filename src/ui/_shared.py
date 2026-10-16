@@ -165,6 +165,13 @@ def operation_result(result: Any) -> tuple[bool, str, str]:
     if result is None:
         return True, "", ""
     if isinstance(result, tuple) and result:
+        for item in result:
+            if getattr(item, "is_valid", None) is not None:
+                return (
+                    bool(getattr(item, "is_valid")),
+                    _detail_from(item),
+                    str(getattr(item, "rule_code", "") or ""),
+                )
         first = result[0]
         if isinstance(first, bool):
             detail = _detail_from(result[1]) if len(result) > 1 else ""
