@@ -25,7 +25,10 @@ LOGGER = logging.getLogger(__name__)
 
 
 def _initialize_repository() -> Any:
-    if "repo" in st.session_state:
+    if "repo" in st.session_state and st.session_state["repo"] is not None:
+        sync_fn = getattr(st.session_state["repo"], "_sync_catalog_from_raw_if_changed", None)
+        if callable(sync_fn):
+            sync_fn()
         return st.session_state["repo"]
 
     if CampusRepository is None:

@@ -70,7 +70,7 @@ def test_rn01_valid_space_reservation(isolated_repo: CampusRepository) -> None:
 
 def test_rn01_invalid_overcapacity(isolated_repo: CampusRepository) -> None:
     """Caso inválido RN-01b: Rechazo cuando los asistentes superan la capacidad permitida del aula."""
-    # SP-101 (Aula Sputnik) tiene capacidad 30
+    # SP-101 (Aula Sputnik) tiene capacidad 38
     reservation, result = isolated_repo.create_reservation(
         space_id="SP-101",
         requester_id="CC-1002",
@@ -264,7 +264,7 @@ def test_rn03_return_loan_with_damage_blocks_resource(isolated_repo: CampusRepos
 
 def test_rn04_invalid_outside_campus_hours() -> None:
     """Caso inválido RN-04: Reserva antes de las 06:00 o después de las 21:30 es rechazada."""
-    space = Space(id="SP-101", name="Aula Sputnik", type="AULA", capacity=30, status="DISPONIBLE")
+    space = Space(id="SP-101", name="Aula Sputnik", type="AULA", capacity=38, status="DISPONIBLE")
     early_result = validate_space_reservation(space, "2026-10-20", "05:30", "07:30", 15, [])
     late_result = validate_space_reservation(space, "2026-10-20", "20:00", "22:00", 15, [])
 
@@ -274,7 +274,7 @@ def test_rn04_invalid_outside_campus_hours() -> None:
 
 def test_rn04_invalid_inverted_or_excessive_duration() -> None:
     """Caso inválido RN-04: Hora fin <= inicio, duración < 30 min o duración > 4.0 horas."""
-    space = Space(id="SP-101", name="Aula Sputnik", type="AULA", capacity=30, status="DISPONIBLE")
+    space = Space(id="SP-101", name="Aula Sputnik", type="AULA", capacity=38, status="DISPONIBLE")
 
     inverted = validate_space_reservation(space, "2026-10-20", "14:00", "10:00", 15, [])
     too_short = validate_space_reservation(space, "2026-10-20", "08:00", "08:15", 15, [])

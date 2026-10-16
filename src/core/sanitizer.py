@@ -641,48 +641,57 @@ def load_and_sanitize_raw_data() -> dict[str, list[Any]]:
 _SEED_SPACES: list[dict[str, Any]] = [
     {
         "id": "SP-101", "name": "Aula Sputnik", "type": "AULA",
-        "capacity": 30, "status": "DISPONIBLE",
+        "capacity": 38, "status": "DISPONIBLE",
         "features": ["Videobeam", "Aire Acondicionado"], "notes": "",
     },
     {
         "id": "SP-102", "name": "Aula Apolo", "type": "AULA",
-        "capacity": 25, "status": "disponible",
+        "capacity": 34, "status": "disponible",
         "features": ["Televisor 55\""], "notes": "",
     },
     {
-        "id": "SP-103", "name": "Laboratorio Artemis", "type": "LABORATORIO",
-        "capacity": 20, "status": "DISPONIBLE",
+        "id": "SP-103", "name": "Aula Artemis", "type": "AULA",
+        "capacity": 32, "status": "DISPONIBLE",
         "features": ["Videobeam", "Tablero Digital"], "notes": "",
     },
     {
-        "id": "SP-104", "name": "Cubículo Halley", "type": "CUBICULO",
+        "id": "SP-104", "name": "Amarillas 1", "type": "CUBICULO",
         "capacity": 6, "status": "DISPONIBLE", "features": [], "notes": "",
     },
     {
         "id": "SP-105", "name": "Auditorio Principal", "type": "AUDITORIO",
-        "capacity": 120, "status": "Disponible",
+        "capacity": 100, "status": "Disponible",
         "features": ["Sonido Profesional", "Videobeam", "Aire Acondicionado"],
         "notes": "",
     },
     {
-        "id": "SP-106", "name": "Aula Gagarin", "type": "AULA",
-        "capacity": 28, "status": "OCUPADO",
+        "id": "SP-106", "name": "Skylab", "type": "AULA",
+        "capacity": 20, "status": "OCUPADO",
         "features": ["Videobeam"], "notes": "En uso por cohorte Java",
     },
     {
-        "id": "SP-107", "name": "Cubículo Kepler", "type": "CUBICULO",
-        "capacity": 4, "status": "DISPONIBLE", "features": [], "notes": "",
+        "id": "SP-107", "name": "Amarillas 2", "type": "CUBICULO",
+        "capacity": 6, "status": "DISPONIBLE", "features": [], "notes": "",
     },
     # --- Registros corruptos intencionales ---
     {
         "id": "", "name": "Aula Fantasma", "type": "AULA",
         "capacity": 15, "status": "DISPONIBLE", "features": [],
-        "notes": "CORRUPTO: ID vacío",
+        "notes": "REGISTRO CORRUPTO: ID vacío",
     },
     {
         "id": "SP-109", "name": "Aula Negativa", "type": "AULA",
         "capacity": -15, "status": "DISPONIBLE", "features": [],
-        "notes": "CORRUPTO: capacidad negativa",
+        "notes": "REGISTRO CORRUPTO: capacidad negativa",
+    },
+    {
+        "id": "SP-110", "name": "Sala Azul", "type": "AULA",
+        "capacity": 10, "status": "DISPONIBLE", "features": [], "notes": "",
+    },
+    {
+        "id": "SP-111", "name": "Sala blanca", "type": "AULA",
+        "capacity": 12, "status": "OCUPADO",
+        "features": ["Videobeam"], "notes": "",
     },
 ]
 
@@ -704,7 +713,7 @@ _SEED_RESOURCES: list[dict[str, Any]] = [
     },
     {
         "id": "RES-04", "name": "Kit Arduino Mega #01", "category": "ROBOTICA",
-        "status": "OPERATIVO", "location": "Laboratorio Artemis",
+        "status": "OPERATIVO", "location": "Aula Artemis",
         "current_borrower": None, "notes": "",
     },
     {

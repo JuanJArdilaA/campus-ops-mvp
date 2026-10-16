@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "last_updated": "2026-10-16T09:30:53",
+    "last_updated": "2026-10-16T11:53:33",
     "initialized_from_raw": true
   },
   "spaces": [
@@ -8,19 +8,19 @@
       "id": "SP-101",
       "name": "Aula Sputnik",
       "type": "AULA",
-      "capacity": 30,
+      "capacity": 38,
       "status": "DISPONIBLE",
       "features": [
         "Videobeam",
         "Aire Acondicionado"
       ],
-      "notes": "[RN-03] Bloqueado por incidencia INC-001 (2026-10-16T09:30:53); [RN-03] Desbloqueado automáticamente (2026-10-16T09:30:53)"
+      "notes": ""
     },
     {
       "id": "SP-102",
       "name": "Aula Apolo",
       "type": "AULA",
-      "capacity": 25,
+      "capacity": 34,
       "status": "DISPONIBLE",
       "features": [
         "Televisor 55\""
@@ -29,9 +29,9 @@
     },
     {
       "id": "SP-103",
-      "name": "Laboratorio Artemis",
-      "type": "LABORATORIO",
-      "capacity": 20,
+      "name": "Aula Artemis",
+      "type": "AULA",
+      "capacity": 32,
       "status": "DISPONIBLE",
       "features": [
         "Videobeam",
@@ -41,7 +41,7 @@
     },
     {
       "id": "SP-104",
-      "name": "Cubículo Halley",
+      "name": "Amarillas 1",
       "type": "CUBICULO",
       "capacity": 6,
       "status": "DISPONIBLE",
@@ -52,7 +52,7 @@
       "id": "SP-105",
       "name": "Auditorio Principal",
       "type": "AUDITORIO",
-      "capacity": 120,
+      "capacity": 100,
       "status": "DISPONIBLE",
       "features": [
         "Sonido Profesional",
@@ -63,9 +63,9 @@
     },
     {
       "id": "SP-106",
-      "name": "Aula Gagarin",
+      "name": "Skylab",
       "type": "AULA",
-      "capacity": 28,
+      "capacity": 20,
       "status": "OCUPADO",
       "features": [
         "Videobeam"
@@ -74,11 +74,31 @@
     },
     {
       "id": "SP-107",
-      "name": "Cubículo Kepler",
+      "name": "Amarillas 2",
       "type": "CUBICULO",
-      "capacity": 4,
+      "capacity": 6,
       "status": "DISPONIBLE",
       "features": [],
+      "notes": ""
+    },
+    {
+      "id": "SP-110",
+      "name": "Sala Azul",
+      "type": "AULA",
+      "capacity": 10,
+      "status": "DISPONIBLE",
+      "features": [],
+      "notes": ""
+    },
+    {
+      "id": "SP-111",
+      "name": "Sala blanca",
+      "type": "AULA",
+      "capacity": 12,
+      "status": "OCUPADO",
+      "features": [
+        "Videobeam"
+      ],
       "notes": ""
     }
   ],
@@ -115,7 +135,7 @@
       "name": "Kit Arduino Mega #01",
       "category": "ROBOTICA",
       "status": "OPERATIVO",
-      "location": "Laboratorio Artemis",
+      "location": "Aula Artemis",
       "current_borrower": null,
       "notes": ""
     },
@@ -149,23 +169,7 @@
   ],
   "reservations": [],
   "loans": [],
-  "incidents": [
-    {
-      "id": "INC-001",
-      "title": "Corto circuito en Aula Sputnik",
-      "description": "Sale humo del tomacorriente del aula",
-      "reporter_name": "Camper Test",
-      "target_type": "ESPACIO",
-      "target_id": "SP-101",
-      "category": "INFRAESTRUCTURA",
-      "priority": "CRITICA",
-      "assigned_team": "Soporte TI",
-      "suggested_action": "Cortar suministro eléctrico inmediatamente",
-      "ai_source": "FALLBACK_RULES",
-      "status": "RESUELTA",
-      "created_at": "2026-10-16T09:30:53"
-    }
-  ],
+  "incidents": [],
   "quarantine": [
     {
       "source_entity": "spaces",

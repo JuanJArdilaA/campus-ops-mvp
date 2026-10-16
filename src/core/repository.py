@@ -114,7 +114,8 @@ class CampusRepository:
 
     def _initialize(self) -> None:
         """
-        RNF-16: Si campus_state.json ya tiene datos, cargarlo.
+        RNF-16: Si campus_state.json ya tiene datos, cargarlo y sincronizar
+        el catálogo base de espacios/recursos si data/raw/ tiene cambios.
         En caso contrario, inicializar desde data/raw/ vía el sanitizer.
         """
         _PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
@@ -123,10 +124,95 @@ class CampusRepository:
             state = self._load_state_from_disk()
             if state and self._state_has_data(state):
                 self._hydrate_from_dict(state)
+                self._sync_catalog_from_raw_if_changed()
                 return
 
         # Inicialización desde raw
         self.reload_from_raw()
+
+    def _sync_catalog_from_raw_if_changed(self) -> None:
+        """Sincroniza nombres, tipos, capacidades y nuevos espacios/recursos desde data/raw/."""
+        raw_data = load_and_sanitize_raw_data()
+        changed = False
+
+        raw_spaces: dict[str, Space] = {s.id: s for s in raw_data["spaces"]}
+        if set(raw_spaces.keys()) != set(self.spaces.keys()):
+            changed = True
+
+        # Mantener estado operativo de espacios existentes con incidencias o reservas,
+        # pero actualizar atributos de catálogo (name, type, capacity, features) y agregar nuevos
+        blocked_space_ids = {
+            inc.target_id
+            for inc in self.incidents
+            if inc.status in ("ABIERTA", "EN_PROCESO") and inc.target_type == "ESPACIO"
+        }
+        updated_spaces: dict[str, Space] = {}
+        for sid, raw_sp in raw_spaces.items():
+            existing = self.spaces.get(sid)
+            if existing is None:
+                updated_spaces[sid] = raw_sp
+                changed = True
+            else:
+                if (
+                    existing.name != raw_sp.name
+                    or existing.type != raw_sp.type
+                    or existing.capacity != raw_sp.capacity
+                    or existing.features != raw_sp.features
+                ):
+                    changed = True
+                status_to_keep = existing.status if sid in blocked_space_ids else existing.status
+                notes_to_keep = existing.notes if sid in blocked_space_ids else raw_sp.notes
+                updated_spaces[sid] = Space(
+                    id=sid,
+                    name=raw_sp.name,
+                    type=raw_sp.type,
+                    capacity=raw_sp.capacity,
+                    status=status_to_keep,
+                    features=raw_sp.features,
+                    notes=notes_to_keep,
+                )
+
+        raw_resources: dict[str, Resource] = {r.id: r for r in raw_data["resources"]}
+        if set(raw_resources.keys()) != set(self.resources.keys()):
+            changed = True
+
+        blocked_res_ids = {
+            inc.target_id
+            for inc in self.incidents
+            if inc.status in ("ABIERTA", "EN_PROCESO") and inc.target_type == "RECURSO"
+        }
+        active_loan_res_ids = {
+            ln.resource_id for ln in self.loans if ln.status == "ACTIVO"
+        }
+        updated_resources: dict[str, Resource] = {}
+        for rid, raw_res in raw_resources.items():
+            existing_res = self.resources.get(rid)
+            if existing_res is None:
+                updated_resources[rid] = raw_res
+                changed = True
+            else:
+                if (
+                    existing_res.name != raw_res.name
+                    or existing_res.category != raw_res.category
+                    or existing_res.location != raw_res.location
+                ):
+                    changed = True
+                keep_dynamic = rid in blocked_res_ids or rid in active_loan_res_ids
+                updated_resources[rid] = Resource(
+                    id=rid,
+                    name=raw_res.name,
+                    category=raw_res.category,
+                    status=existing_res.status if keep_dynamic else existing_res.status,
+                    location=raw_res.location,
+                    current_borrower=existing_res.current_borrower,
+                    notes=existing_res.notes if keep_dynamic else raw_res.notes,
+                )
+
+        if changed:
+            self.spaces = updated_spaces
+            self.resources = updated_resources
+            self.quarantine = raw_data["quarantine"]
+            self.save_state()
 
     @staticmethod
     def _state_has_data(state: dict[str, Any]) -> bool:
