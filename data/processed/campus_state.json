@@ -1,12 +1,223 @@
 {
   "metadata": {
-    "last_updated": "2026-10-16T08:30:00",
+    "last_updated": "2026-10-16T09:30:53",
     "initialized_from_raw": true
   },
-  "spaces": [],
-  "resources": [],
+  "spaces": [
+    {
+      "id": "SP-101",
+      "name": "Aula Sputnik",
+      "type": "AULA",
+      "capacity": 30,
+      "status": "DISPONIBLE",
+      "features": [
+        "Videobeam",
+        "Aire Acondicionado"
+      ],
+      "notes": "[RN-03] Bloqueado por incidencia INC-001 (2026-10-16T09:30:53); [RN-03] Desbloqueado automáticamente (2026-10-16T09:30:53)"
+    },
+    {
+      "id": "SP-102",
+      "name": "Aula Apolo",
+      "type": "AULA",
+      "capacity": 25,
+      "status": "DISPONIBLE",
+      "features": [
+        "Televisor 55\""
+      ],
+      "notes": ""
+    },
+    {
+      "id": "SP-103",
+      "name": "Laboratorio Artemis",
+      "type": "LABORATORIO",
+      "capacity": 20,
+      "status": "DISPONIBLE",
+      "features": [
+        "Videobeam",
+        "Tablero Digital"
+      ],
+      "notes": ""
+    },
+    {
+      "id": "SP-104",
+      "name": "Cubículo Halley",
+      "type": "CUBICULO",
+      "capacity": 6,
+      "status": "DISPONIBLE",
+      "features": [],
+      "notes": ""
+    },
+    {
+      "id": "SP-105",
+      "name": "Auditorio Principal",
+      "type": "AUDITORIO",
+      "capacity": 120,
+      "status": "DISPONIBLE",
+      "features": [
+        "Sonido Profesional",
+        "Videobeam",
+        "Aire Acondicionado"
+      ],
+      "notes": ""
+    },
+    {
+      "id": "SP-106",
+      "name": "Aula Gagarin",
+      "type": "AULA",
+      "capacity": 28,
+      "status": "OCUPADO",
+      "features": [
+        "Videobeam"
+      ],
+      "notes": "En uso por cohorte Java"
+    },
+    {
+      "id": "SP-107",
+      "name": "Cubículo Kepler",
+      "type": "CUBICULO",
+      "capacity": 4,
+      "status": "DISPONIBLE",
+      "features": [],
+      "notes": ""
+    }
+  ],
+  "resources": [
+    {
+      "id": "RES-01",
+      "name": "MacBook Pro M2 #01",
+      "category": "COMPUTO",
+      "status": "OPERATIVO",
+      "location": "Bodega Central",
+      "current_borrower": null,
+      "notes": ""
+    },
+    {
+      "id": "RES-02",
+      "name": "MacBook Pro M2 #02",
+      "category": "COMPUTO",
+      "status": "OPERATIVO",
+      "location": "Bodega Central",
+      "current_borrower": null,
+      "notes": ""
+    },
+    {
+      "id": "RES-03",
+      "name": "Proyector Epson S41+",
+      "category": "AUDIOVISUAL",
+      "status": "OPERATIVO",
+      "location": "Bodega Central",
+      "current_borrower": null,
+      "notes": ""
+    },
+    {
+      "id": "RES-04",
+      "name": "Kit Arduino Mega #01",
+      "category": "ROBOTICA",
+      "status": "OPERATIVO",
+      "location": "Laboratorio Artemis",
+      "current_borrower": null,
+      "notes": ""
+    },
+    {
+      "id": "RES-05",
+      "name": "Cable HDMI 3m",
+      "category": "ACCESORIO",
+      "status": "OPERATIVO",
+      "location": "Bodega Central",
+      "current_borrower": null,
+      "notes": ""
+    },
+    {
+      "id": "RES-06",
+      "name": "ThinkPad T14 #03",
+      "category": "COMPUTO",
+      "status": "PRESTADO",
+      "location": "Bodega Central",
+      "current_borrower": "CAM-2024-050",
+      "notes": ""
+    },
+    {
+      "id": "RES-07",
+      "name": "Proyector Epson S41+ #02",
+      "category": "AUDIOVISUAL",
+      "status": "EN_MANTENIMIENTO",
+      "location": "Bodega Central",
+      "current_borrower": null,
+      "notes": "Lámpara quemada"
+    }
+  ],
   "reservations": [],
   "loans": [],
-  "incidents": [],
-  "quarantine": []
+  "incidents": [
+    {
+      "id": "INC-001",
+      "title": "Corto circuito en Aula Sputnik",
+      "description": "Sale humo del tomacorriente del aula",
+      "reporter_name": "Camper Test",
+      "target_type": "ESPACIO",
+      "target_id": "SP-101",
+      "category": "INFRAESTRUCTURA",
+      "priority": "CRITICA",
+      "assigned_team": "Soporte TI",
+      "suggested_action": "Cortar suministro eléctrico inmediatamente",
+      "ai_source": "FALLBACK_RULES",
+      "status": "RESUELTA",
+      "created_at": "2026-10-16T09:30:53"
+    }
+  ],
+  "quarantine": [
+    {
+      "source_entity": "spaces",
+      "raw_data": {
+        "id": "",
+        "name": "Aula Fantasma",
+        "type": "AULA",
+        "capacity": 15,
+        "status": "DISPONIBLE",
+        "features": [],
+        "notes": "REGISTRO CORRUPTO: ID vacío"
+      },
+      "reason": "ID vacío o ausente"
+    },
+    {
+      "source_entity": "spaces",
+      "raw_data": {
+        "id": "SP-109",
+        "name": "Aula Negativa",
+        "type": "AULA",
+        "capacity": -15,
+        "status": "DISPONIBLE",
+        "features": [],
+        "notes": "REGISTRO CORRUPTO: capacidad negativa"
+      },
+      "reason": "Capacidad inválida (<= 0): -15"
+    },
+    {
+      "source_entity": "resources",
+      "raw_data": {
+        "id": "RES-08",
+        "name": "Equipo Roto Fantasma",
+        "category": "COMPUTO",
+        "status": "Averiado",
+        "location": "Bodega Central",
+        "current_borrower": null,
+        "notes": "REGISTRO CORRUPTO: estado no reconocido 'Averiado'"
+      },
+      "reason": "Estado de recurso no reconocido: 'Averiado'"
+    },
+    {
+      "source_entity": "resources",
+      "raw_data": {
+        "id": "RES-09",
+        "name": "Cable misterioso",
+        "category": "DESCONOCIDO",
+        "status": "OPERATIVO",
+        "location": "Bodega Central",
+        "current_borrower": null,
+        "notes": "REGISTRO CORRUPTO: categoría no reconocida"
+      },
+      "reason": "Categoría de recurso no reconocida: 'DESCONOCIDO'"
+    }
+  ]
 }
