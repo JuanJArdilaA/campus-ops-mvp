@@ -24,15 +24,7 @@ from src.core.models import (
     QuarantineRecord,
     ValidationResult,
 )
-from src.core.validators import (
-    OVERCAPACITY_FACTOR,
-    MAX_ACTIVE_LOANS_PER_USER,
-    BLOCKING_PRIORITIES,
-    CAMPUS_OPEN_TIME,
-    CAMPUS_CLOSE_TIME,
-    MAX_RESERVATION_HOURS,
-    MIN_RESERVATION_MINUTES,
-)
+import src.core.validators as _validators
 from src.core.sanitizer import load_and_sanitize_raw_data
 
 # ──────────────────────────────────────────────────────────────
@@ -46,14 +38,8 @@ _TEMP_FILE: Path = _PROCESSED_DIR / "campus_state.tmp.json"
 
 
 # ──────────────────────────────────────────────────────────────
-# Helpers internos de validación
+# Helpers internos de validación (delegados a src/core/validators.py)
 # ──────────────────────────────────────────────────────────────
-
-def _time_to_minutes(t: str) -> int:
-    """Convierte 'HH:MM' a minutos desde medianoche."""
-    parts = t.strip().split(":")
-    return int(parts[0]) * 60 + int(parts[1])
-
 
 def _validate_space_reservation(
     space: Space,
@@ -62,121 +48,18 @@ def _validate_space_reservation(
     start_time: str,
     end_time: str,
     existing_reservations: list[Reservation],
+    requester_role: str = "CAMPER",
 ) -> ValidationResult:
-    """
-    Valida las reglas RN-01 y RN-04 para una nueva reserva de espacio.
-    """
-    # RN-01a: Espacio debe estar DISPONIBLE u OCUPADO
-    if space.status not in ("DISPONIBLE", "OCUPADO"):
-        return ValidationResult(
-            is_valid=False,
-            message=(
-                f"[RN-01] El espacio '{space.name}' ({space.id}) está en estado "
-                f"'{space.status}' y no acepta nuevas reservas."
-            ),
-            rule_code="RN-01",
-        )
-
-    # RN-01b: Aforo
-    max_allowed = int(space.capacity * OVERCAPACITY_FACTOR)
-    if attendees > max_allowed:
-        return ValidationResult(
-            is_valid=False,
-            message=(
-                f"[RN-01] Exceso de aforo: se solicitan {attendees} asistentes "
-                f"pero la capacidad máxima permitida de '{space.name}' es {max_allowed} "
-                f"(capacidad base: {space.capacity}, factor: {OVERCAPACITY_FACTOR})."
-            ),
-            rule_code="RN-01",
-        )
-
-    # RN-04: Ventana horaria y duración
-    try:
-        start_mins = _time_to_minutes(start_time)
-        end_mins = _time_to_minutes(end_time)
-        open_mins = _time_to_minutes(CAMPUS_OPEN_TIME)
-        close_mins = _time_to_minutes(CAMPUS_CLOSE_TIME)
-    except (ValueError, IndexError):
-        return ValidationResult(
-            is_valid=False,
-            message="[RN-04] Formato de hora inválido. Use 'HH:MM' en formato 24h.",
-            rule_code="RN-04",
-        )
-
-    if end_mins <= start_mins:
-        return ValidationResult(
-            is_valid=False,
-            message=(
-                f"[RN-04] La hora de fin ({end_time}) debe ser estrictamente "
-                f"mayor que la hora de inicio ({start_time})."
-            ),
-            rule_code="RN-04",
-        )
-
-    if start_mins < open_mins:
-        return ValidationResult(
-            is_valid=False,
-            message=(
-                f"[RN-04] La hora de inicio ({start_time}) es anterior a la "
-                f"apertura del campus ({CAMPUS_OPEN_TIME})."
-            ),
-            rule_code="RN-04",
-        )
-
-    if end_mins > close_mins:
-        return ValidationResult(
-            is_valid=False,
-            message=(
-                f"[RN-04] La hora de fin ({end_time}) excede el cierre "
-                f"del campus ({CAMPUS_CLOSE_TIME})."
-            ),
-            rule_code="RN-04",
-        )
-
-    duration_mins = end_mins - start_mins
-    max_duration_mins = int(MAX_RESERVATION_HOURS * 60)
-    if duration_mins > max_duration_mins:
-        return ValidationResult(
-            is_valid=False,
-            message=(
-                f"[RN-04] La duración ({duration_mins} min) excede el máximo "
-                f"permitido de {MAX_RESERVATION_HOURS} horas ({max_duration_mins} min)."
-            ),
-            rule_code="RN-04",
-        )
-
-    if duration_mins < MIN_RESERVATION_MINUTES:
-        return ValidationResult(
-            is_valid=False,
-            message=(
-                f"[RN-04] La duración ({duration_mins} min) es menor al mínimo "
-                f"permitido de {MIN_RESERVATION_MINUTES} minutos."
-            ),
-            rule_code="RN-04",
-        )
-
-    # RN-01c: Anti-solapamiento
-    for existing in existing_reservations:
-        if (
-            existing.space_id == space.id
-            and existing.date == date
-            and existing.status == "ACTIVA"
-        ):
-            ex_start = _time_to_minutes(existing.start_time)
-            ex_end = _time_to_minutes(existing.end_time)
-            if start_mins < ex_end and end_mins > ex_start:
-                return ValidationResult(
-                    is_valid=False,
-                    message=(
-                        f"[RN-01] Solapamiento horario: existe una reserva activa "
-                        f"({existing.id}) de {existing.requester_name} en "
-                        f"'{space.name}' el {date} de {existing.start_time} a "
-                        f"{existing.end_time}."
-                    ),
-                    rule_code="RN-01",
-                )
-
-    return ValidationResult(is_valid=True, message="Reserva válida.", rule_code="OK")
+    """Delega la validación RN-01 y RN-04 a src.core.validators."""
+    return _validators.validate_space_reservation(
+        space,
+        date,
+        start_time,
+        end_time,
+        attendees,
+        existing_reservations,
+        requester_role=requester_role,
+    )
 
 
 def _validate_resource_loan(
@@ -184,44 +67,21 @@ def _validate_resource_loan(
     borrower_id: str,
     active_loans: list[Loan],
 ) -> ValidationResult:
-    """
-    Valida las reglas RN-02 para un nuevo préstamo de recurso.
-    """
-    # RN-02a: Recurso debe estar OPERATIVO
-    if resource.status != "OPERATIVO":
-        return ValidationResult(
-            is_valid=False,
-            message=(
-                f"[RN-02] El recurso '{resource.name}' ({resource.id}) está en estado "
-                f"'{resource.status}' y no puede ser prestado."
-            ),
-            rule_code="RN-02",
-        )
-
-    # RN-02b: Cuota por usuario
-    user_active_loans = [
-        ln for ln in active_loans
-        if ln.borrower_id == borrower_id and ln.status == "ACTIVO"
-    ]
-    if len(user_active_loans) >= MAX_ACTIVE_LOANS_PER_USER:
-        equipment_ids = [ln.resource_id for ln in user_active_loans]
-        return ValidationResult(
-            is_valid=False,
-            message=(
-                f"[RN-02] El usuario '{borrower_id}' ya tiene "
-                f"{len(user_active_loans)} préstamo(s) activo(s) "
-                f"(máximo permitido: {MAX_ACTIVE_LOANS_PER_USER}). "
-                f"Debe devolver primero: {equipment_ids}."
-            ),
-            rule_code="RN-02",
-        )
-
-    return ValidationResult(is_valid=True, message="Préstamo válido.", rule_code="OK")
+    """Delega la validación RN-02 a src.core.validators."""
+    return _validators.validate_resource_loan(
+        resource=resource,
+        borrower_or_loan=borrower_id,
+        active_loans=active_loans,
+    )
 
 
-def _should_block_asset_on_incident(priority: str) -> bool:
-    """Determina si una prioridad debe disparar bloqueo automático (RN-03)."""
-    return priority in BLOCKING_PRIORITIES
+def _should_block_asset_on_incident(
+    priority: str,
+    target_type: Optional[str] = None,
+    target_id: Optional[str] = None,
+) -> bool:
+    """Delega la validación RN-03 a src.core.validators."""
+    return _validators.should_block_asset_on_incident(priority, target_type, target_id)
 
 
 # ──────────────────────────────────────────────────────────────
@@ -795,7 +655,7 @@ class CampusRepository:
             inc for inc in self.incidents
             if inc.target_id == target_id
             and inc.status in ("ABIERTA", "EN_PROCESO")
-            and inc.priority in BLOCKING_PRIORITIES
+            and inc.priority in _validators.BLOCKING_PRIORITIES
         ]
 
         if blocking_open:

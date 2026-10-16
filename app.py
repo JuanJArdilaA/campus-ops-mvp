@@ -8,6 +8,8 @@ from typing import Any
 import streamlit as st
 
 from src.ui._shared import field_value, get_records
+from src.ui.views_audit import render_audit_view
+from src.ui.views_incidents import render_incidents_view
 from src.ui.views_resources import render_resources_view
 from src.ui.views_spaces import render_spaces_view
 
@@ -99,11 +101,9 @@ def main() -> None:
         with resources_tab:
             render_resources_view(repo)
         with incidents_tab:
-            st.subheader("Incidencias y triaje IA")
-            st.info("La vista de incidencias corresponde a TASK-10.")
+            render_incidents_view(repo)
         with audit_tab:
-            st.subheader("Auditoría y cuarentena")
-            st.info("La vista de auditoría corresponde a TASK-11.")
+            render_audit_view(repo)
     except Exception:
         LOGGER.exception("Error inesperado al renderizar el dashboard.")
         st.error("No se pudo cargar una sección del dashboard. Revise el estado del repositorio e inténtelo de nuevo.")
