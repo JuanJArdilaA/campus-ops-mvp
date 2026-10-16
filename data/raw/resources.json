@@ -1,0 +1,84 @@
+[
+  {
+    "id": "RES-01",
+    "name": "MacBook Pro M2 #01",
+    "category": "COMPUTO",
+    "status": "OPERATIVO",
+    "location": "Bodega Central",
+    "current_borrower": null,
+    "notes": ""
+  },
+  {
+    "id": "RES-02",
+    "name": "MacBook Pro M2 #02",
+    "category": "COMPUTO",
+    "status": "operativo",
+    "location": "Bodega Central",
+    "current_borrower": null,
+    "notes": ""
+  },
+  {
+    "id": "RES-03",
+    "name": "Proyector Epson S41+",
+    "category": "AUDIOVISUAL",
+    "status": "OPERATIVO",
+    "location": "Bodega Central",
+    "current_borrower": null,
+    "notes": ""
+  },
+  {
+    "id": "RES-04",
+    "name": "Kit Arduino Mega #01",
+    "category": "ROBOTICA",
+    "status": "OPERATIVO",
+    "location": "Laboratorio Artemis",
+    "current_borrower": null,
+    "notes": ""
+  },
+  {
+    "id": "RES-05",
+    "name": "Cable HDMI 3m",
+    "category": "ACCESORIO",
+    "status": "OPERATIVO",
+    "location": "Bodega Central",
+    "current_borrower": null,
+    "notes": ""
+  },
+  {
+    "id": "RES-06",
+    "name": "ThinkPad T14 #03",
+    "category": "COMPUTO",
+    "status": "PRESTADO",
+    "location": "Bodega Central",
+    "current_borrower": "CAM-2024-050",
+    "notes": ""
+  },
+  {
+    "id": "RES-07",
+    "name": "Proyector Epson S41+ #02",
+    "category": "AUDIOVISUAL",
+    "status": "EN_MANTENIMIENTO",
+    "location": "Bodega Central",
+    "current_borrower": null,
+    "notes": "Lámpara quemada"
+  },
+  {
+    "id": "RES-08",
+    "name": "Equipo Roto Fantasma",
+    "category": "COMPUTO",
+    "status": "Averiado",
+    "location": "Bodega Central",
+    "current_borrower": null,
+    "notes": "REGISTRO CORRUPTO: estado no reconocido 'Averiado'"
+  },
+  {
+    "id": "RES-09",
+    "name": "Cable misterioso",
+    "category": "DESCONOCIDO",
+    "status": "OPERATIVO",
+    "location": "Bodega Central",
+    "current_borrower": null,
+    "notes": "REGISTRO CORRUPTO: categoría no reconocida"
+  }
+]
+
