@@ -280,6 +280,7 @@ class CampusRepository:
         end_time: str,
         attendees: int,
         purpose: str,
+        requester_role: str = "CAMPER",
     ) -> tuple[Optional[Reservation], ValidationResult]:
         """
         Crea una nueva reserva validando RN-01 y RN-04.
@@ -305,6 +306,7 @@ class CampusRepository:
             start_time=start_time,
             end_time=end_time,
             existing_reservations=self.reservations,
+            requester_role=requester_role,
         )
 
         if not validation.is_valid:
