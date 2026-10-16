@@ -109,9 +109,10 @@ def render_spaces_view(repo: Any) -> None:
                 space_ids,
                 format_func=lambda item: f"{field_value(space_by_id[item], 'name', item)} · capacidad {field_value(space_by_id[item], 'capacity', 0)}",
             )
-            identity_columns = st.columns(2)
+            identity_columns = st.columns(3)
             requester_id = identity_columns[0].text_input("Documento o código del solicitante")
             requester_name = identity_columns[1].text_input("Nombre del solicitante")
+            requester_role = identity_columns[2].selectbox("Rol del solicitante", ("CAMPER", "TRAINER", "STAFF"))
             schedule_columns = st.columns(3)
             reservation_date: date = schedule_columns[0].date_input("Fecha", value=date.today())
             start_time: time = schedule_columns[1].time_input("Hora de inicio", value=time(8, 0), step=1800)
@@ -136,11 +137,13 @@ def render_spaces_view(repo: Any) -> None:
                     purpose=purpose.strip(),
                     status="ACTIVA",
                 )
+                payload = asdict(reservation)
+                payload["requester_role"] = requester_role
                 try:
                     result = call_repository(
                         repo,
                         ("create_reservation",),
-                        payload=asdict(reservation),
+                        payload=payload,
                         entity=reservation,
                         entity_name="reservation",
                     )

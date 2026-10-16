@@ -81,7 +81,7 @@
   - **Archivos a crear:** `README.md`.
   - **Criterio de Verificación:** Auditar el repositorio ejecutando `git status` y `git log -p` para confirmar que no hay archivos `.env` ni claves expuestas.
 
-- [ ] **TASK-14 | Responsable: Todo el Equipo | Simulacro de Sustentación**
+- [x] **TASK-14 | Responsable: Todo el Equipo | Simulacro de Sustentación**
   - **Objetivo:** Practicar 3 ejercicios de modificación en vivo sobre `src/core/validators.py` cronometrando menos de 2 minutos:
     1. Cambiar el máximo de préstamos por usuario de 2 a 1 (`MAX_ACTIVE_LOANS_PER_USER = 1`).
     2. Permitir que solo los `TRAINER` puedan reservar `AUDITORIO`.

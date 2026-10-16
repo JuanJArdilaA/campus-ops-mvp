@@ -361,3 +361,69 @@ def test_ai_service_triage_and_allocation_contracts(isolated_repo: CampusReposit
     assert "recommended_resource_ids" in rec
     assert isinstance(rec["recommended_resource_ids"], list)
     assert bool(rec["justification"])
+
+
+# ==============================================================================
+# TASK-14 / RNF-03: SIMULACRO DE MODIFICACIÓN DE REGLAS EN VIVO (< 90s)
+# ==============================================================================
+
+
+def test_task14_live_modification_scenarios(
+    isolated_repo: CampusRepository,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Verifica los 3 ejercicios del Simulacro de Sustentación (TASK-14) sobre src/core/validators.py."""
+    import src.core.validators as validators_mod
+
+    # Ejercicio 1: Cambiar máximo de préstamos por usuario de 2 a 1
+    monkeypatch.setattr(validators_mod, "MAX_ACTIVE_LOANS_PER_USER", 1)
+    _, loan1_res = isolated_repo.create_loan("RES-01", "CAM-900", "Camper Simulacro", "CAMPER", "2026-10-16 18:00")
+    assert loan1_res.is_valid is True
+    _, loan2_res = isolated_repo.create_loan("RES-02", "CAM-900", "Camper Simulacro", "CAMPER", "2026-10-16 18:00")
+    assert loan2_res.is_valid is False and loan2_res.rule_code == "RN-02"
+
+    # Ejercicio 2: Permitir que solo los TRAINER puedan reservar AUDITORIO (SP-105)
+    monkeypatch.setattr(validators_mod, "AUDITORIO_ALLOWED_ROLES", {"TRAINER"})
+    _, camper_aud = isolated_repo.create_reservation(
+        space_id="SP-105",
+        requester_id="CAM-900",
+        requester_name="Camper Simulacro",
+        date="2026-10-22",
+        start_time="08:00",
+        end_time="10:00",
+        attendees=50,
+        purpose="Evento",
+        requester_role="CAMPER",
+    )
+    assert camper_aud.is_valid is False and camper_aud.rule_code == "RN-01"
+
+    _, trainer_aud = isolated_repo.create_reservation(
+        space_id="SP-105",
+        requester_id="TR-01",
+        requester_name="Trainer Oficial",
+        date="2026-10-22",
+        start_time="08:00",
+        end_time="10:00",
+        attendees=50,
+        purpose="Conferencia",
+        requester_role="TRAINER",
+    )
+    assert trainer_aud.is_valid is True
+
+    # Ejercicio 3: Hacer que incidencias de prioridad MEDIA también bloqueen preventivamente activos
+    monkeypatch.setattr(validators_mod, "BLOCKING_PRIORITIES", {"CRITICA", "ALTA", "MEDIA"})
+    blocked, _ = isolated_repo.create_incident(
+        title="Falla intermitente de proyección",
+        description="El equipo presenta parpadeo medio durante las sesiones",
+        reporter_name="Trainer Oficial",
+        target_type="RECURSO",
+        target_id="RES-04",
+        category="HARDWARE",
+        priority="MEDIA",
+        assigned_team="Soporte TI",
+        suggested_action="Revisar conector",
+        ai_source="FALLBACK_RULES",
+    )
+    assert blocked is True
+    assert isolated_repo.get_resource_by_id("RES-04").status == "EN_MANTENIMIENTO"
+
