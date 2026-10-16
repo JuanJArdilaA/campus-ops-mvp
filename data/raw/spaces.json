@@ -3,7 +3,7 @@
     "id": "SP-101",
     "name": "Aula Sputnik",
     "type": "AULA",
-    "capacity": 30,
+    "capacity": 38,
     "status": "DISPONIBLE",
     "features": ["Videobeam", "Aire Acondicionado"],
     "notes": ""
@@ -12,23 +12,23 @@
     "id": "SP-102",
     "name": "Aula Apolo",
     "type": "AULA",
-    "capacity": 25,
+    "capacity": 34,
     "status": "disponible",
     "features": ["Televisor 55\""],
     "notes": ""
   },
   {
     "id": "SP-103",
-    "name": "Laboratorio Artemis",
-    "type": "LABORATORIO",
-    "capacity": 20,
+    "name": "Aula Artemis",
+    "type": "AULA",
+    "capacity": 32,
     "status": "DISPONIBLE",
     "features": ["Videobeam", "Tablero Digital"],
     "notes": ""
   },
   {
     "id": "SP-104",
-    "name": "Cubículo Halley",
+    "name": "Amarillas 1",
     "type": "CUBICULO",
     "capacity": 6,
     "status": "DISPONIBLE",
@@ -39,25 +39,25 @@
     "id": "SP-105",
     "name": "Auditorio Principal",
     "type": "AUDITORIO",
-    "capacity": 120,
+    "capacity": 100,
     "status": "Disponible",
     "features": ["Sonido Profesional", "Videobeam", "Aire Acondicionado"],
     "notes": ""
   },
   {
     "id": "SP-106",
-    "name": "Aula Gagarin",
+    "name": "Skylab",
     "type": "AULA",
-    "capacity": 28,
+    "capacity": 20,
     "status": "OCUPADO",
     "features": ["Videobeam"],
     "notes": "En uso por cohorte Java"
   },
   {
     "id": "SP-107",
-    "name": "Cubículo Kepler",
+    "name": "Amarillas 2",
     "type": "CUBICULO",
-    "capacity": 4,
+    "capacity": 6,
     "status": "DISPONIBLE",
     "features": [],
     "notes": ""
@@ -79,6 +79,24 @@
     "status": "DISPONIBLE",
     "features": [],
     "notes": "REGISTRO CORRUPTO: capacidad negativa"
+  },
+  {
+    "id": "SP-110",
+    "name": "Sala Azul",
+    "type": "AULA",
+    "capacity": 10,
+    "status": "DISPONIBLE",
+    "features": [],
+    "notes": ""
+  },
+  {
+    "id": "SP-111",
+    "name": "Sala blanca",
+    "type": "AULA",
+    "capacity": 12,
+    "status": "OCUPADO",
+    "features": ["Videobeam"],
+    "notes": ""
   }
 ]
 
